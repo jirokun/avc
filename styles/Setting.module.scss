@@ -1,0 +1,41 @@
+.header {
+  background: linear-gradient(#959595, #6d6d6d);
+  color: white;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+
+.settingContainer {
+  margin: 1em 1em 0 1em;
+
+  .settingItem {
+    label {
+      font-size: 1.2rem;
+      margin: 0 0.5em 0 0;
+      padding: 0;
+      display: block;
+    }
+    input {
+      width: 100%;
+    }
+  }
+
+  .settingButton {
+    margin-top: 1em;
+    text-align: right;
+    button {
+      width: 100px;
+      border-radius: 80px;
+      margin-left: 10px;
+      font-size: 24px;
+    }
+  }
+}
