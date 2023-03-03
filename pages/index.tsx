@@ -121,7 +121,7 @@ export default function Home() {
       </Head>
       <main className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>ChatGPT</h1>
+          <h1 className={styles.title}>AI Voice Chat</h1>
         </header>
         <div className={styles.dialogLog}>
           <table>

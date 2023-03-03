@@ -8,6 +8,7 @@ export async function callWhisper(
   audioBlob: Blob
 ): Promise<string> {
   const formData = new FormData();
+  console.log(audioBlob);
   formData.append("file", audioBlob, "audio.mp4");
   formData.append("model", "whisper-1");
 
