@@ -42,7 +42,9 @@ export default function Home() {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
-      const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+
+      //const recorder = new MediaRecorder(stream, { mimeType: "audio/mp4" });
+      const recorder = new MediaRecorder(stream);
       recorderRef.current = recorder;
       setStatus("idle");
       return;
@@ -58,7 +60,7 @@ export default function Home() {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
-    const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+    const recorder = new MediaRecorder(stream);
     recorderRef.current = recorder;
     recorder.start();
     const audioChunks: Blob[] = [];
