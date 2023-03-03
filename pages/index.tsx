@@ -7,12 +7,20 @@ import { AiFillSetting } from "react-icons/ai";
 import Link from "next/link";
 import { start } from "repl";
 
-type Status = "idle" | "recording" | "callWhisper" | "callChatGPT" | "speaking";
+type Status =
+  | "notInitialized"
+  | "idle"
+  | "recording"
+  | "callWhisper"
+  | "callChatGPT"
+  | "speaking";
 // Statusに対応する文字列を返す関数
 const statusToString = (status: Status) => {
   switch (status) {
+    case "notInitialized":
+      return "最初に押してね";
     case "idle":
-      return "押し続けてね";
+      return "話す";
     case "recording":
       return "録音中";
     case "callWhisper":
@@ -25,17 +33,33 @@ const statusToString = (status: Status) => {
 };
 
 export default function Home() {
-  const [status, setStatus] = useState("idle" as Status);
+  const [status, setStatus] = useState("notInitialized" as Status);
   const [chatContext, setChatContext] = useState([] as ChatContext[]);
   const recorderRef = useRef<MediaRecorder>();
 
-  const startListening = useCallback(async () => {
+  const onClickButton = useCallback(async () => {
+    if (status === "notInitialized") {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+      recorderRef.current = recorder;
+      setStatus("idle");
+      return;
+    }
+    if (status === "recording") {
+      recorderRef.current!.stop();
+      return;
+    }
+
     if (status !== "idle") return;
     setStatus("recording");
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+    });
     const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
     recorderRef.current = recorder;
-
     recorder.start();
     const audioChunks: Blob[] = [];
     recorder.addEventListener("dataavailable", (event) => {
@@ -80,9 +104,6 @@ export default function Home() {
       setStatus("idle");
     });
   }, [chatContext, status]);
-  const stopListening = useCallback(() => {
-    recorderRef.current!.stop();
-  }, []);
   // chatContextが変更されたら一番下までスクロールする
   useEffect(() => {
     const dialogLog = document.querySelector("." + styles.dialogLog);
@@ -113,13 +134,7 @@ export default function Home() {
           </table>
         </div>
         <div className={styles.speakButtonContainer}>
-          <button
-            className={styles.speakButton}
-            onMouseDown={startListening}
-            onTouchStart={startListening}
-            onMouseUp={stopListening}
-            onTouchEnd={stopListening}
-          >
+          <button className={styles.speakButton} onClick={onClickButton}>
             {statusToString(status)}
           </button>
           <Link href="/setting">

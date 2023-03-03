@@ -22,6 +22,9 @@ export default function Setting() {
     // indexに戻る
     router.push("/");
   }, [googleApiKey, googleVoice, openAiApiKey, router]);
+  const onCancel = useCallback(() => {
+    router.push("/");
+  }, [router]);
   const onChangeOpenAiApiKey = useCallback((e: ChangeEvent) => {
     setOpenAiApiKey((e.target as HTMLInputElement).value);
   }, []);
@@ -77,7 +80,9 @@ export default function Setting() {
             </select>
           </div>
           <div className={styles.settingButton}>
-            <button className="cancel">Cancel</button>
+            <button onClick={onCancel} className="cancel">
+              Cancel
+            </button>
             <button onClick={onSave} className="save">
               Save
             </button>
